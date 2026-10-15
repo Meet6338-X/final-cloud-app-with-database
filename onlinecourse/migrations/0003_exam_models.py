@@ -1,0 +1,36 @@
+# Final project migration: rename Question.question to content and add
+# Choice and Submission models for the exam assessment feature.
+from django.db import migrations, models
+import django.db.models.deletion
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('onlinecourse', '0002_question'),
+    ]
+
+    operations = [
+        migrations.RenameField(
+            model_name='question',
+            old_name='question',
+            new_name='content',
+        ),
+        migrations.CreateModel(
+            name='Choice',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('content', models.CharField(max_length=200)),
+                ('is_correct', models.BooleanField(default=False)),
+                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='onlinecourse.question')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Submission',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('choices', models.ManyToManyField(to='onlinecourse.choice')),
+                ('enrollment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='onlinecourse.enrollment')),
+            ],
+        ),
+    ]
